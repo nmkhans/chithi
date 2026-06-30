@@ -1,0 +1,109 @@
+@font-face {
+  font-family: "custom-font";
+  src: url("./custom-font.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at 20% 80%,
+      rgba(233, 222, 250, 0.8) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(251, 252, 219, 0.9) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 182, 193, 0.3) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 70% 70%,
+      rgba(173, 216, 230, 0.4) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 10% 30%,
+      rgba(255, 239, 213, 0.5) 0%,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 90% 60%,
+      rgba(230, 230, 250, 0.6) 0%,
+      transparent 40%
+    ),
+    linear-gradient(135deg, #e9defa, #f0e6ff, #f5f0ff 50%, #fbfcdb);
+
+  font-family: "custom-font";
+  color: rgb(102 71 60 / var(--tw-text-opacity, 1));
+  min-height: 100vh;
+  font-size: 18px;
+}
+
+.chithi-container {
+  background-color: #fff;
+  background-image:
+    linear-gradient(
+      90deg,
+      transparent 69px,
+      #abced4 69px,
+      #abced4 71px,
+      transparent 71px
+    ),
+    linear-gradient(#eee 0.1em, transparent 0.1em);
+  background-size: 100% 1.3em;
+  width: 100%;
+  max-width: 700px; /* fixed max-width instead of % based */
+  margin: 0 auto;
+}
+
+p {
+  margin-bottom: 20px;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 17px;
+    padding: 20px 0;
+  }
+
+  .chithi-container {
+    max-width: 100%;
+    margin: 0 12px;
+    background-image:
+      linear-gradient(
+        90deg,
+        transparent 30px,
+        #abced4 30px,
+        #abced4 32px,
+        transparent 32px
+      ),
+      linear-gradient(#eee 0.1em, transparent 0.1em);
+  }
+
+  .chithi-content {
+    padding-left: 40px !important;
+    padding-right: 16px !important;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  body {
+    font-size: 15px;
+  }
+
+  .chithi-content {
+    padding-left: 16px !important;
+    padding-right: 12px !important;
+  }
+}
