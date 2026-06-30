@@ -7,59 +7,49 @@
 
 body {
   background:
-    radial-gradient(
-      circle at 20% 80%,
-      rgba(233, 222, 250, 0.8) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(251, 252, 219, 0.9) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(255, 182, 193, 0.3) 0%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 70% 70%,
-      rgba(173, 216, 230, 0.4) 0%,
-      transparent 45%
-    ),
-    radial-gradient(
-      circle at 10% 30%,
-      rgba(255, 239, 213, 0.5) 0%,
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at 90% 60%,
-      rgba(230, 230, 250, 0.6) 0%,
-      transparent 40%
-    ),
+    radial-gradient(circle at 20% 80%, rgba(233, 222, 250, 0.8) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(251, 252, 219, 0.9) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 182, 193, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 70% 70%, rgba(173, 216, 230, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 10% 30%, rgba(255, 239, 213, 0.5) 0%, transparent 35%),
+    radial-gradient(circle at 90% 60%, rgba(230, 230, 250, 0.6) 0%, transparent 40%),
     linear-gradient(135deg, #e9defa, #f0e6ff, #f5f0ff 50%, #fbfcdb);
 
   font-family: "custom-font";
   color: rgb(102 71 60 / var(--tw-text-opacity, 1));
   min-height: 100vh;
   font-size: 18px;
+  overflow-x: hidden;
 }
 
 .chithi-container {
   background-color: #fff;
   background-image:
-    linear-gradient(
-      90deg,
-      transparent 69px,
-      #abced4 69px,
-      #abced4 71px,
-      transparent 71px
-    ),
+    linear-gradient(90deg, transparent 69px, #abced4 69px, #abced4 71px, transparent 71px),
     linear-gradient(#eee 0.1em, transparent 0.1em);
   background-size: 100% 1.3em;
   width: 100%;
-  max-width: 700px; /* fixed max-width instead of % based */
+  max-width: 700px;
   margin: 0 auto;
+
+  /* hidden by default, revealed via JS */
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.chithi-container.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  position: relative;
+  left: auto;
+  translate: none;
 }
 
 p {
@@ -67,23 +57,146 @@ p {
   line-height: 1.8;
 }
 
+/* ====== ENVELOPE ====== */
+
+.envelope-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.envelope-wrapper.hide {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  position: absolute;
+}
+
+.envelope {
+  position: relative;
+  width: 320px;
+  height: 210px;
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.envelope-back {
+  position: absolute;
+  inset: 0;
+  background: #f3e9e0;
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* letter peek that slides up when opened */
+.envelope-letter-peek {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 8px;
+  height: 70%;
+  background: #fffdf8;
+  border-radius: 4px;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.08);
+  z-index: 2;
+  transition: transform 0.6s ease 0.3s, height 0.6s ease 0.3s;
+}
+
+.envelope.opened .envelope-letter-peek {
+  transform: translateY(-130px);
+  height: 90%;
+}
+
+/* bottom triangle flaps (front pocket) */
+.envelope-front-left,
+.envelope-front-right {
+  position: absolute;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  background: #e8c4b8;
+  z-index: 3;
+}
+
+.envelope-front-left {
+  left: 0;
+  clip-path: polygon(0 100%, 0 0, 100% 100%);
+  background: linear-gradient(135deg, #f0d2c5, #e3b5a4);
+}
+
+.envelope-front-right {
+  right: 0;
+  clip-path: polygon(100% 100%, 100% 0, 0 100%);
+  background: linear-gradient(225deg, #f0d2c5, #e3b5a4);
+}
+
+/* top flap that opens */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%;
+  background: linear-gradient(160deg, #eccab9, #dba48f);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  z-index: 4;
+  transition: transform 0.6s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.envelope.opened .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.envelope-seal {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 34px;
+  z-index: 5;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.envelope.opened .envelope-seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.envelope-hint {
+  font-size: 15px;
+  color: rgb(102 71 60 / 0.7);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ====== RESPONSIVE ====== */
+
 @media (max-width: 768px) {
   body {
     font-size: 17px;
     padding: 20px 0;
   }
 
+  .envelope {
+    width: 260px;
+    height: 170px;
+  }
+
   .chithi-container {
     max-width: 100%;
     margin: 0 12px;
     background-image:
-      linear-gradient(
-        90deg,
-        transparent 30px,
-        #abced4 30px,
-        #abced4 32px,
-        transparent 32px
-      ),
+      linear-gradient(90deg, transparent 30px, #abced4 30px, #abced4 32px, transparent 32px),
       linear-gradient(#eee 0.1em, transparent 0.1em);
   }
 
@@ -100,6 +213,11 @@ p {
 @media (max-width: 420px) {
   body {
     font-size: 15px;
+  }
+
+  .envelope {
+    width: 220px;
+    height: 145px;
   }
 
   .chithi-content {
